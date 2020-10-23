@@ -1,9 +1,11 @@
 package pl.mprzymus.bmi
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
+import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.bmi_count.Bmi
 import pl.mprzymus.bmi.bmi_count.BmiMetric
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
@@ -13,6 +15,7 @@ import java.text.DecimalFormat
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     var calculator: Bmi = BmiMetric()
+    val handler: CategoryHandler = CategoryHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                         heightET.text.toString().toDouble(),
                         massET.text.toString().toDouble()
                     )
+                    handler.handleBmi(bmi, bmiTV)
                     val df = DecimalFormat("#.##")
                     bmiTV.text = df.format(bmi)
                 }
