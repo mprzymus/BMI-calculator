@@ -16,8 +16,7 @@ import java.text.DecimalFormat
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var calculator: BmiUnitsDirector
-
-    private val handler: CategoryHandler = CategoryHandler()
+    private var handler: CategoryHandler = CategoryHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +30,23 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        outState.putString("result", binding.bmiTV.text.toString())
+        outState.putSerializable("units", calculator)
         //TODO oprogramowac zapamietywanie stanu ui (tam gdzie potrzeba)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-        //savedInstanceState.putBinder("result", binding.bmiTV.text)
+        handler = CategoryHandler()
+        var bmi = savedInstanceState.getString("result")
+        binding.bmiTV.text = bmi
+        if (bmi != null && bmi != getString(R.string.empty_value)) {
+            bmi = bmi.replace(",", ".")
+            handler.handleBmi(bmi.toDouble(), binding.bmiTV)
+        }
+        calculator = savedInstanceState.getSerializable("units") as BmiUnitsDirector
+        binding.heightTV.text = calculator.heightUnits[calculator.index]
+        binding.massTV.text = calculator.weightUnits[calculator.index]
         //TODO odt. stanu
     }
 
@@ -45,7 +55,6 @@ class MainActivity : AppCompatActivity() {
     fun count(view: View) {
         binding.apply {
             //TODO sprawdzanie danych wejsciowych
-            //TODO Możlowość zmiany jednostek
             when {
                 heightET.text.isBlank() || massET.text.isBlank() -> {
                     if (heightET.text.isBlank()) {

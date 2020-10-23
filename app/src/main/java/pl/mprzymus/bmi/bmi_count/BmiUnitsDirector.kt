@@ -1,8 +1,9 @@
 package pl.mprzymus.bmi.bmi_count
 
 import android.widget.TextView
+import java.io.Serializable
 
-class BmiUnitsDirector(private val heightUnits: List<String>, private val weightUnits: List<String>) {
+class BmiUnitsDirector(val heightUnits: List<String>, val weightUnits: List<String>) :Serializable {
     private val calculators = listOf(BmiMetric(), BmiEnglishUnits())
     var index: Int = 0
 

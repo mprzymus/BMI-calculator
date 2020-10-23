@@ -8,7 +8,7 @@ class CategoryHandler {
         const val BOTTOM_BORDER = 18.5
         const val UPPER_BORDER = 25.0
     }
-    fun handleBmi(bmi: Double, view: TextView) {
+    fun handleBmi(bmi: Double, view: TextView, valueToIgnore: String = "") {
         if (isTooLow(bmi)) {
             view.setTextColor(Color.RED)
         }
