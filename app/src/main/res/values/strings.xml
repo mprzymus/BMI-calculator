@@ -9,4 +9,8 @@
     <string name="height_is_empty">Height is empty</string>
     <string name="mass_is_empty">Mass is empty</string>
     <string name="change_unit">Change Unit</string>
+    <string name="bmi_ok">Your weight is good. Good job</string>
+    <string name="bmi_to_low">Start eat something</string>
+    <string name="bmi_to_high">Stop eat everything</string>
+    <string name="empty_value_info">Firstly count BMI, idiot!</string>
 </resources>

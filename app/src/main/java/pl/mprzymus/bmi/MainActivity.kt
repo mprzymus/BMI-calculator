@@ -1,5 +1,6 @@
 package pl.mprzymus.bmi
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -35,7 +36,6 @@ class MainActivity : AppCompatActivity() {
         outState.putString("result", binding.bmiTV.text.toString())
         outState.putSerializable("units", calculator)
         outState.putInt("color", defaultColor)
-        //TODO oprogramowac zapamietywanie stanu ui (tam gdzie potrzeba)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -46,12 +46,11 @@ class MainActivity : AppCompatActivity() {
         binding.bmiTV.text = bmi
         if (bmi != null && bmi != getString(R.string.empty_value)) {
             bmi = bmi.replace(",", ".")
-            handler.handleBmi(bmi.toDouble(), binding.bmiTV, defaultColor)
+            handler.handleBmiColor(bmi.toDouble(), binding.bmiTV, defaultColor)
         }
         calculator = savedInstanceState.getSerializable("units") as BmiUnitsDirector
         binding.heightTV.text = calculator.heightUnits[calculator.index]
         binding.massTV.text = calculator.weightUnits[calculator.index]
-        //TODO odt. stanu
     }
 
     //TODO kliknięcie wyniku wyświetla aktywność z opisem wyniku, 3 elementy
@@ -73,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                         heightET.text.toString().toDouble(),
                         massET.text.toString().toDouble()
                     )
-                    handler.handleBmi(bmi, bmiTV, defaultColor)
+                    handler.handleBmiColor(bmi, bmiTV, defaultColor)
                     val df = DecimalFormat("#.##")
                     bmiTV.text = df.format(bmi)
                 }
@@ -102,5 +101,12 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    fun showBmiDetails(view: View) {
+        val intent = Intent(this, BmiInfo::class.java).apply {
+            putExtra(BmiInfo.BMI, binding.bmiTV.text)
+        }
+        startActivity(intent)
     }
 }
