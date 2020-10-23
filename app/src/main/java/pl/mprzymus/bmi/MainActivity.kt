@@ -2,11 +2,12 @@ package pl.mprzymus.bmi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.EditText
 import pl.mprzymus.bmi.bmi_count.Bmi
 import pl.mprzymus.bmi.bmi_count.BmiMetric
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
+import java.text.DecimalFormat
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,15 +34,33 @@ class MainActivity : AppCompatActivity() {
     //TODO kliknięcie wyniku wyświetla aktywność z opisem wyniku, 3 elementy
 
     fun count(view: View) {
-        Log.wtf("test", "wtf")
         binding.apply {
             //TODO oprogramowac liczenie bmi i sprawdzanie danych wejsciowych
             //TODO kolor zależny od wyniku
             //TODO Możlowość zmiany jednostek
-            if (heightET.text.isBlank()) {
-                heightET.error = getString(R.string.height_is_empty)
-                bmiTV.text = heightET.text.toString()
+            when {
+                heightET.text.isBlank() || massET.text.isBlank() -> {
+                    if (heightET.text.isBlank()) {
+                        handleEmptyInput(heightET, R.string.height_is_empty)
+                    }
+                    if (massET.text.isBlank()) {
+                        handleEmptyInput(massET, R.string.mass_is_empty)
+                    }
+                }
+                else -> {
+                    val bmi = calculator.countBmi(
+                        heightET.text.toString().toDouble(),
+                        massET.text.toString().toDouble()
+                    )
+                    val df = DecimalFormat("#.##")
+                    bmiTV.text = df.format(bmi)
+                }
             }
         }
+    }
+
+    private fun ActivityMainBinding.handleEmptyInput(editText: EditText, emptyInfo: Int) {
+        editText.error = getString(emptyInfo)
+        bmiTV.text = editText.text.toString()
     }
 }
