@@ -1,5 +1,7 @@
 package pl.mprzymus.bmi.bmi_count
 
-interface Bmi {
+import java.io.Serializable
+
+interface Bmi : Serializable {
     fun countBmi(height: Double, weight: Double): Double
 }
