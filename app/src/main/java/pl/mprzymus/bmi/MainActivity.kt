@@ -1,12 +1,12 @@
 package pl.mprzymus.bmi
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
@@ -17,11 +17,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var calculator: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
+    private var defaultColor: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        defaultColor = binding.bmiTV.currentTextColor
         calculator = BmiUnitsDirector(
             listOf(getString(R.string.height_cm), getString(R.string.height_uk)),
             listOf(getString(R.string.mass_kg), getString(R.string.mass_uk))
@@ -32,17 +34,19 @@ class MainActivity : AppCompatActivity() {
         super.onSaveInstanceState(outState)
         outState.putString("result", binding.bmiTV.text.toString())
         outState.putSerializable("units", calculator)
+        outState.putInt("color", defaultColor)
         //TODO oprogramowac zapamietywanie stanu ui (tam gdzie potrzeba)
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
+        defaultColor = savedInstanceState.getInt("color")
         handler = CategoryHandler()
         var bmi = savedInstanceState.getString("result")
         binding.bmiTV.text = bmi
         if (bmi != null && bmi != getString(R.string.empty_value)) {
             bmi = bmi.replace(",", ".")
-            handler.handleBmi(bmi.toDouble(), binding.bmiTV)
+            handler.handleBmi(bmi.toDouble(), binding.bmiTV, defaultColor)
         }
         calculator = savedInstanceState.getSerializable("units") as BmiUnitsDirector
         binding.heightTV.text = calculator.heightUnits[calculator.index]
@@ -69,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                         heightET.text.toString().toDouble(),
                         massET.text.toString().toDouble()
                     )
-                    handler.handleBmi(bmi, bmiTV)
+                    handler.handleBmi(bmi, bmiTV, defaultColor)
                     val df = DecimalFormat("#.##")
                     bmiTV.text = df.format(bmi)
                 }
