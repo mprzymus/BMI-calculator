@@ -1,26 +1,32 @@
 package pl.mprzymus.bmi
 
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
-import pl.mprzymus.bmi.bmi_count.Bmi
-import pl.mprzymus.bmi.bmi_count.BmiMetric
+import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
 import java.text.DecimalFormat
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    var calculator: Bmi = BmiMetric()
-    val handler: CategoryHandler = CategoryHandler()
+    private lateinit var calculator: BmiUnitsDirector
+
+    private val handler: CategoryHandler = CategoryHandler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        calculator = BmiUnitsDirector(
+            listOf(getString(R.string.height_cm), getString(R.string.height_uk)),
+            listOf(getString(R.string.mass_kg), getString(R.string.mass_uk))
+        )
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -38,8 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     fun count(view: View) {
         binding.apply {
-            //TODO oprogramowac liczenie bmi i sprawdzanie danych wejsciowych
-            //TODO kolor zależny od wyniku
+            //TODO sprawdzanie danych wejsciowych
             //TODO Możlowość zmiany jednostek
             when {
                 heightET.text.isBlank() || massET.text.isBlank() -> {
@@ -66,5 +71,23 @@ class MainActivity : AppCompatActivity() {
     private fun ActivityMainBinding.handleEmptyInput(editText: EditText, emptyInfo: Int) {
         editText.error = getString(emptyInfo)
         bmiTV.text = editText.text.toString()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.change_units -> {
+                binding.apply {
+                    calculator.switchUnits(heightTV, massTV)
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

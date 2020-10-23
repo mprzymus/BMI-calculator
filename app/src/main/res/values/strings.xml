@@ -2,8 +2,11 @@
     <string name="app_name">BMI</string>
     <string name="mass_kg">Weight [kg]</string>
     <string name="height_cm">Height [cm]</string>
+    <string name="mass_uk">Weight [lb]</string>
+    <string name="height_uk">Height [in]</string>
     <string name="count_bmi">Count BMI</string>
     <string name="empty_value">0.00</string>
     <string name="height_is_empty">Height is empty</string>
     <string name="mass_is_empty">Mass is empty</string>
+    <string name="change_unit">Change Unit</string>
 </resources>
