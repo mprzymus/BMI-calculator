@@ -1,6 +1,7 @@
 package pl.mprzymus.bmi
 
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.databinding.ActivityBmiInfoBinding
@@ -37,13 +38,21 @@ class BmiInfo : AppCompatActivity() {
         when {
             handler.isTooLow(bmiAsDouble) -> {
                 binding.bmiInfoTV.text = getString(R.string.bmi_to_low)
+                setImage(R.drawable.bad_img)
             }
             handler.isTooHigh(bmiAsDouble) -> {
                 binding.bmiInfoTV.text = getString(R.string.bmi_to_high)
-            }
+                val iv = findViewById<ImageView>(R.id.imageBmi)
+                setImage(R.drawable.bad_img)            }
             else -> {
                 binding.bmiInfoTV.text = getString(R.string.bmi_ok)
+                setImage(R.drawable.good_img)
             }
         }
+    }
+
+    private fun setImage(img: Int) {
+        val iv = findViewById<ImageView>(R.id.imageBmi)
+        iv.setImageResource(img)
     }
 }
