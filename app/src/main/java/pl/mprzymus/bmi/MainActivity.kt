@@ -16,23 +16,16 @@ import java.text.DecimalFormat
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
-    private lateinit var calculator: BmiUnitsDirector
+    private lateinit var unitsDirector: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0
-
-    companion object {
-        const val WEIGHT_MIN = 30.0
-        const val WEIGHT_MAX = 500.0
-        const val HEIGHT_MIN = 120.0
-        const val HEIGHT_MAX = 250.0
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         defaultColor = binding.bmiTV.currentTextColor
-        calculator = BmiUnitsDirector(
+        unitsDirector = BmiUnitsDirector(
             listOf(getString(R.string.height_cm), getString(R.string.height_uk)),
             listOf(getString(R.string.mass_kg), getString(R.string.mass_uk))
         )
@@ -41,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("result", binding.bmiTV.text.toString())
-        outState.putSerializable("units", calculator)
+        outState.putSerializable("units", unitsDirector)
         outState.putInt("color", defaultColor)
     }
 
@@ -55,9 +48,9 @@ class MainActivity : AppCompatActivity() {
             bmi = bmi.replace(",", ".")
             handler.handleBmiColor(bmi.toDouble(), binding.bmiTV, defaultColor)
         }
-        calculator = savedInstanceState.getSerializable("units") as BmiUnitsDirector
-        binding.heightTV.text = calculator.heightUnits[calculator.index]
-        binding.massTV.text = calculator.weightUnits[calculator.index]
+        unitsDirector = savedInstanceState.getSerializable("units") as BmiUnitsDirector
+        binding.heightTV.text = unitsDirector.heightUnitsStrings[unitsDirector.index]
+        binding.massTV.text = unitsDirector.weightUnitsStrings[unitsDirector.index]
     }
 
     fun count(view: View) {
@@ -69,19 +62,15 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     val height = heightET.text.toString().toDouble()
                     val weight = massET.text.toString().toDouble()
-                    val weightTooLow = weight < WEIGHT_MIN
-                    val weightTooHigh = weight > WEIGHT_MAX
-                    val heightTooLow = height < HEIGHT_MIN
-                    val heightTooHigh = height > HEIGHT_MAX
-                    if (!weightTooHigh && ! weightTooLow && !heightTooHigh &&!heightTooLow) {
+                    val weightTooLow = unitsDirector.getCurrentValidator().isWeightTooLow(weight)
+                    val weightTooHigh = unitsDirector.getCurrentValidator().isWeightTooHigh(weight)
+                    val heightTooLow = unitsDirector.getCurrentValidator().isHeightTooLow(height)
+                    val heightTooHigh = unitsDirector.getCurrentValidator().isHeightTooHigh(height)
+                    if (!weightTooHigh && !weightTooLow && !heightTooHigh && !heightTooLow) {
                         handleValidInput(height, weight)
-                    }
-                    else {
+                    } else {
                         handleIncorrectValues(
-                            weightTooHigh,
-                            weightTooLow,
-                            heightTooHigh,
-                            heightTooLow
+                            weightTooHigh, weightTooLow, heightTooHigh, heightTooLow
                         )
                     }
                 }
@@ -90,11 +79,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun ActivityMainBinding.handleIncorrectValues(
-        weightTooHigh: Boolean,
-        weightTooLow: Boolean,
-        heightTooHigh: Boolean,
-        heightTooLow: Boolean
-    ) {
+        weightTooHigh: Boolean, weightTooLow: Boolean, heightTooHigh: Boolean, heightTooLow: Boolean
+    )
+    {
         if (weightTooHigh) {
             handleWrongInput(massET, R.string.wrong_weight_high)
         }
@@ -127,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         height: Double,
         weight: Double
     ) {
-        val bmi = calculator.countBmi(height, weight)
+        val bmi = unitsDirector.countBmi(height, weight)
         handler.handleBmiColor(bmi, bmiTV, defaultColor)
         val df = DecimalFormat("#.##")
         bmiTV.text = df.format(bmi)
@@ -143,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.change_units -> {
                 binding.apply {
-                    calculator.switchUnits(heightTV, massTV)
+                    unitsDirector.switchUnits(heightTV, massTV)
                 }
                 true
             }
