@@ -107,6 +107,6 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, BmiInfo::class.java).apply {
             putExtra(BmiInfo.BMI, binding.bmiTV.text)
         }
-        startActivity(intent)
+        startActivityForResult(intent, 1)
     }
 }
