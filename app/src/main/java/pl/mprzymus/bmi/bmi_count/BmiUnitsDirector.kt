@@ -9,7 +9,7 @@ import java.io.Serializable
 class BmiUnitsDirector(val heightUnitsStrings: List<String>, val weightUnitsStrings: List<String>) :
     Serializable {
     private val calculators = listOf(BmiMetric(), BmiEnglishUnits())
-    private val validators = listOf(MetricValidator(), EnglishValidator())
+    private val validators: List<UnitValidator> = listOf(MetricValidator(), EnglishValidator())
     var index: Int = 0
 
     fun countBmi(height: Double, weight: Double): Double {
