@@ -20,6 +20,13 @@ class MainActivity : AppCompatActivity() {
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0
 
+    companion object {
+        const val WEIGHT_MIN = 30.0
+        const val WEIGHT_MAX = 500.0
+        const val HEIGHT_MIN = 120.0
+        const val HEIGHT_MAX = 250.0
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -53,36 +60,77 @@ class MainActivity : AppCompatActivity() {
         binding.massTV.text = calculator.weightUnits[calculator.index]
     }
 
-    //TODO kliknięcie wyniku wyświetla aktywność z opisem wyniku, 3 elementy
-
     fun count(view: View) {
         binding.apply {
-            //TODO sprawdzanie danych wejsciowych
             when {
                 heightET.text.isBlank() || massET.text.isBlank() -> {
-                    if (heightET.text.isBlank()) {
-                        handleEmptyInput(heightET, R.string.height_is_empty)
-                    }
-                    if (massET.text.isBlank()) {
-                        handleEmptyInput(massET, R.string.mass_is_empty)
-                    }
+                    handleBlankInput()
                 }
                 else -> {
-                    val bmi = calculator.countBmi(
-                        heightET.text.toString().toDouble(),
-                        massET.text.toString().toDouble()
-                    )
-                    handler.handleBmiColor(bmi, bmiTV, defaultColor)
-                    val df = DecimalFormat("#.##")
-                    bmiTV.text = df.format(bmi)
+                    val height = heightET.text.toString().toDouble()
+                    val weight = massET.text.toString().toDouble()
+                    val weightTooLow = weight < WEIGHT_MIN
+                    val weightTooHigh = weight > WEIGHT_MAX
+                    val heightTooLow = height < HEIGHT_MIN
+                    val heightTooHigh = height > HEIGHT_MAX
+                    if (!weightTooHigh && ! weightTooLow && !heightTooHigh &&!heightTooLow) {
+                        handleValidInput(height, weight)
+                    }
+                    else {
+                        handleIncorrectValues(
+                            weightTooHigh,
+                            weightTooLow,
+                            heightTooHigh,
+                            heightTooLow
+                        )
+                    }
                 }
             }
         }
     }
 
-    private fun ActivityMainBinding.handleEmptyInput(editText: EditText, emptyInfo: Int) {
+    private fun ActivityMainBinding.handleIncorrectValues(
+        weightTooHigh: Boolean,
+        weightTooLow: Boolean,
+        heightTooHigh: Boolean,
+        heightTooLow: Boolean
+    ) {
+        if (weightTooHigh) {
+            handleWrongInput(massET, R.string.wrong_weight_high)
+        }
+        if (weightTooLow) {
+            handleWrongInput(massET, R.string.wrong_weight_low)
+        }
+        if (heightTooHigh) {
+            handleWrongInput(heightET, R.string.wrong_height_high)
+        }
+        if (heightTooLow) {
+            handleWrongInput(heightET, R.string.wrong_height_low)
+        }
+    }
+
+    private fun ActivityMainBinding.handleBlankInput() {
+        if (heightET.text.isBlank()) {
+            handleWrongInput(heightET, R.string.height_is_empty)
+        }
+        if (massET.text.isBlank()) {
+            handleWrongInput(massET, R.string.mass_is_empty)
+        }
+    }
+
+    private fun ActivityMainBinding.handleWrongInput(editText: EditText, emptyInfo: Int) {
         editText.error = getString(emptyInfo)
         bmiTV.text = editText.text.toString()
+    }
+
+    private fun ActivityMainBinding.handleValidInput(
+        height: Double,
+        weight: Double
+    ) {
+        val bmi = calculator.countBmi(height, weight)
+        handler.handleBmiColor(bmi, bmiTV, defaultColor)
+        val df = DecimalFormat("#.##")
+        bmiTV.text = df.format(bmi)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
