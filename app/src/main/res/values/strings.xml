@@ -17,4 +17,5 @@
     <string name="wrong_height_high">height too high</string>
     <string name="wrong_weight_low">weight too low</string>
     <string name="wrong_weight_high">weight too high</string>
+    <string name="image_bmi_description">image with reaction about your weight</string>
 </resources>
