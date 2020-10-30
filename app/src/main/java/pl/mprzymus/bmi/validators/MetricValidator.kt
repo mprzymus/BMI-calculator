@@ -1,6 +1,8 @@
 package pl.mprzymus.bmi.validators
 
-class MetricValidator : UnitValidator {
+import java.io.Serializable
+
+class MetricValidator : UnitValidator, Serializable {
 
     companion object {
         const val WEIGHT_MIN = 30.0
@@ -14,7 +16,7 @@ class MetricValidator : UnitValidator {
     }
 
     override fun isWeightTooHigh(weight: Double): Boolean {
-        return weight < WEIGHT_MAX
+        return weight > WEIGHT_MAX
     }
 
     override fun isHeightTooHigh(height: Double): Boolean {
@@ -22,6 +24,6 @@ class MetricValidator : UnitValidator {
     }
 
     override fun isHeightTooLow(height: Double): Boolean {
-        return height < HEIGHT_MAX
+        return height > HEIGHT_MAX
     }
 }

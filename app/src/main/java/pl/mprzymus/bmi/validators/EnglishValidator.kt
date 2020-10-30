@@ -1,6 +1,8 @@
 package pl.mprzymus.bmi.validators
 
-class EnglishValidator: UnitValidator {
+import java.io.Serializable
+
+class EnglishValidator: UnitValidator, Serializable {
 
     companion object {
         const val WEIGHT_MIN = 66.0
