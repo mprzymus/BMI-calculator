@@ -2,4 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/change_units"
         android:title="@string/change_unit" />
+    <item android:id="@+id/show_history"
+        android:title="@string/show_history" />
 </menu>

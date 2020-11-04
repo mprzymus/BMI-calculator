@@ -18,4 +18,5 @@
     <string name="wrong_weight_low">weight too low</string>
     <string name="wrong_weight_high">weight too high</string>
     <string name="image_bmi_description">image with reaction about your weight</string>
+    <string name="show_history">History</string>
 </resources>

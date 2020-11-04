@@ -10,6 +10,7 @@ import pl.mprzymus.bmi.R
 class HistoryAdapter<T>(private val dataSet: FixedStack<T>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     class HistoryViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
+        val number: TextView = itemView.findViewById(R.id.history_number)
         val textView: TextView = itemView.findViewById(R.id.itemDate)
     }
 
@@ -22,6 +23,7 @@ class HistoryAdapter<T>(private val dataSet: FixedStack<T>) :
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
+        holder.number.text = String.format("%d.", position + 1)
         holder.textView.text = dataSet[position].toString()
     }
 
