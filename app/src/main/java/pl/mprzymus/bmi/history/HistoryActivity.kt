@@ -24,7 +24,7 @@ class HistoryActivity : AppCompatActivity() {
         data.add(2.0)
         data.add(3.0)
         recyclerView = findViewById<RecyclerView>(R.id.history_recycle).apply {
-            //setHasFixedSize(true)
+            setHasFixedSize(true)
             layoutManager = viewManager
             adapter = viewAdapter
         }
