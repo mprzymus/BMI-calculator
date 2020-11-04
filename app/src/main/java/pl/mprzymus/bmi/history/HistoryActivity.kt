@@ -20,9 +20,9 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(binding.root)
         viewManager = LinearLayoutManager(this)
         data.clear()
-        data.add(1.0)
-        data.add(2.0)
-        data.add(3.0)
+        data.push(1.0)
+        data.push(2.0)
+        data.push(3.0)
         recyclerView = findViewById<RecyclerView>(R.id.history_recycle).apply {
             setHasFixedSize(true)
             layoutManager = viewManager

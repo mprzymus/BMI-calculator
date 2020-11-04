@@ -24,7 +24,7 @@ class HistoryAdapter<T>(private val dataSet: FixedStack<T>) :
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
         holder.number.text = String.format("%d.", position + 1)
-        holder.textView.text = dataSet[position].toString()
+        holder.textView.text = dataSet.getFifo(position).toString()
     }
 
     override fun getItemCount() = dataSet.size
