@@ -2,6 +2,7 @@ package pl.mprzymus.bmi
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
+import pl.mprzymus.bmi.history.HistoryActivity
 import java.text.DecimalFormat
 
 
@@ -80,8 +82,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun ActivityMainBinding.handleIncorrectValues(
         weightTooHigh: Boolean, weightTooLow: Boolean, heightTooHigh: Boolean, heightTooLow: Boolean
-    )
-    {
+    ) {
         if (weightTooHigh) {
             handleWrongInput(massET, R.string.wrong_weight_high)
         }
@@ -132,6 +133,12 @@ class MainActivity : AppCompatActivity() {
                 binding.apply {
                     unitsDirector.switchUnits(heightTV, massTV)
                 }
+                true
+            }
+            R.id.show_history -> {
+                Log.d("history", "not implemented yet")
+                val intent = Intent(this, HistoryActivity::class.java)
+                startActivity(intent)
                 true
             }
             else -> super.onOptionsItemSelected(item)
