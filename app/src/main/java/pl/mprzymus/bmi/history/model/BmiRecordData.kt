@@ -7,11 +7,12 @@ class BmiRecordData(
     val weightUnit: WeightUnit,
     val height: Double,
     val heightUnit: HeightUnit,
-    val bmi: Double
+    val bmi: Double,
+    val date: String
 ): Serializable {
-    override fun toString(): String {
+    fun getData(): String {
         return String.format(
-            "weight: %.1f%s, height: %.1f%s, bmi: %.1f",
+            "%.1f%s, %.1f%s, BMI: %.1f",
             weight,
             weightUnit,
             height,

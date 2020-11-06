@@ -11,6 +11,6 @@ class BmiRecordDataTest : FunSpec({
     val data = BmiRecordData(70.0, WeightUnit.KILOGRAM, 180.0, HeightUnit.CENTIMETER, 23.5)
 
     test("bmi info to string test") {
-        data.toString() shouldBe "weight: 70.0kg, height: 180.0cm, bmi: 23.5"
+        data.getData() shouldBe "weight: 70.0kg, height: 180.0cm, bmi: 23.5"
     }
 })

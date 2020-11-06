@@ -18,6 +18,8 @@ import pl.mprzymus.bmi.history.HistoryActivity
 import pl.mprzymus.bmi.history.HistoryStackSaver
 import pl.mprzymus.bmi.history.model.BmiRecordData
 import java.text.DecimalFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
@@ -130,6 +132,9 @@ class MainActivity : AppCompatActivity() {
         val bmi = unitsDirector.countBmi(height, weight)
         handler.handleBmiColor(bmi, bmiTV, defaultColor)
         val df = DecimalFormat("#.##")
+        val date = LocalDateTime.now()
+        val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm")
+        val dateString = dateFormatter.format(date)
         bmiTV.text = df.format(bmi)
         history.push(
             BmiRecordData(
@@ -137,7 +142,8 @@ class MainActivity : AppCompatActivity() {
                 unitsDirector.getCurrentWeightUnit(),
                 height,
                 unitsDirector.getCurrentHeightUnit(),
-                bmi
+                bmi,
+                dateString
             )
         )
     }

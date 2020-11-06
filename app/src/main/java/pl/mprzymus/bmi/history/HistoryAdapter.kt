@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.mprzymus.bmi.R
+import pl.mprzymus.bmi.history.model.BmiRecordData
 
-class HistoryAdapter<T>(private val dataSet: FixedStack<T>) :
+class HistoryAdapter(private val dataSet: FixedStack<BmiRecordData>) :
     RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
     class HistoryViewHolder(listItemView: View) : RecyclerView.ViewHolder(listItemView) {
         val number: TextView = itemView.findViewById(R.id.history_number)
@@ -23,8 +24,8 @@ class HistoryAdapter<T>(private val dataSet: FixedStack<T>) :
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        holder.number.text = String.format("%d.", position + 1)
-        holder.textView.text = dataSet.getFifo(position).toString()
+        holder.number.text = dataSet.getFifo(position).date
+        holder.textView.text = dataSet.getFifo(position).getData()
     }
 
     override fun getItemCount() = dataSet.size

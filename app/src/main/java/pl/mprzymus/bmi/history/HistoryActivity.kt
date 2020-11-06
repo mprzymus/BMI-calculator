@@ -14,7 +14,7 @@ import kotlin.reflect.typeOf
 
 class HistoryActivity : AppCompatActivity() {
     lateinit var binding: HistoryLayoutBinding
-    private lateinit var viewAdapter: HistoryAdapter<BmiRecordData>
+    private lateinit var viewAdapter: HistoryAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewManager: RecyclerView.LayoutManager
 

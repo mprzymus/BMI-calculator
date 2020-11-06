@@ -2,6 +2,7 @@ package pl.mprzymus.bmi.history
 
 import android.app.Activity
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import pl.mprzymus.bmi.history.model.BmiRecordData
 import pl.mprzymus.bmi.history.model.HeightUnit
@@ -15,6 +16,7 @@ class HistoryStackSaver(private val activity: Activity) {
         const val HEIGHT = "height"
         const val HEIGHT_UNIT = "heightUnit"
         const val BMI = "bmi"
+        const val DATE = "date"
     }
 
     fun save(data: FixedStack<BmiRecordData>) {
@@ -26,35 +28,52 @@ class HistoryStackSaver(private val activity: Activity) {
         }
         repeat(size) {
             print(it)
-            with(sharedPref.edit()) {
-                putFloat(WEIGHT + it, data[it].weight.toFloat())
-                putString(WEIGHT_UNIT + it, data[it].weightUnit.toString())
-                putFloat(HEIGHT + it, data[it].height.toFloat())
-                putString(HEIGHT_UNIT + it, data[it].heightUnit.toString())
-                putFloat(BMI + it, data[it].bmi.toFloat())
-                apply()
-            }
+            saveRecord(sharedPref, it, data)
         }
     }
+
+    private fun saveRecord(
+        sharedPref: SharedPreferences,
+        position: Int,
+        data: FixedStack<BmiRecordData>
+    ) {
+        with(sharedPref.edit()) {
+            putFloat(WEIGHT + position, data[position].weight.toFloat())
+            putString(WEIGHT_UNIT + position, data[position].weightUnit.toString())
+            putFloat(HEIGHT + position, data[position].height.toFloat())
+            putString(HEIGHT_UNIT + position, data[position].heightUnit.toString())
+            putFloat(BMI + position, data[position].bmi.toFloat())
+            putString(DATE + position, data[position].date)
+            apply()
+        }
+    }
+
     fun load(): FixedStack<BmiRecordData> {
         val stack = FixedStack<BmiRecordData>(HistoryActivity.MAX_HISTORY_SIZE)
         val sharedPref = activity.getPreferences(Context.MODE_PRIVATE)
         val size = sharedPref.getInt(DATA_SIZE, 0)
         repeat(size) {
-            print(it)
-            val weight = sharedPref.getFloat(WEIGHT + it, 0F).toDouble()
-            val weightUnitName = sharedPref.getString(WEIGHT_UNIT + it, "unknown")
-            val height = sharedPref.getFloat(HEIGHT + it, 0F).toDouble()
-            val heightUnitName = sharedPref.getString(HEIGHT_UNIT + it, "unknown")
-            val bmi = sharedPref.getFloat(BMI + it, 0F).toDouble()
-            if (weight != 0.0 && weight != 0.0 && bmi != 0.0 && weightUnitName != null && heightUnitName != null) {
-                Log.d("loading", "works for $it")
-                val weightUnit = WeightUnit.getUnit(weightUnitName)
-                val heightUnit = HeightUnit.getUnit(heightUnitName)
-                stack.push(BmiRecordData(weight, weightUnit, height, heightUnit, bmi))
-            }
-
+            loadRecord(sharedPref, it, stack)
         }
         return stack
+    }
+
+    private fun loadRecord(
+        sharedPref: SharedPreferences,
+        position: Int,
+        stack: FixedStack<BmiRecordData>
+    ) {
+        val weight = sharedPref.getFloat(WEIGHT + position, 0F).toDouble()
+        val weightUnitName = sharedPref.getString(WEIGHT_UNIT + position, "unknown unit")
+        val height = sharedPref.getFloat(HEIGHT + position, 0F).toDouble()
+        val heightUnitName = sharedPref.getString(HEIGHT_UNIT + position, "unknown unit")
+        val bmi = sharedPref.getFloat(BMI + position, 0F).toDouble()
+        val date = sharedPref.getString(DATE + position, "unknown date")
+        if (weight != 0.0 && weight != 0.0 && bmi != 0.0 && weightUnitName != null && heightUnitName != null && date != null) {
+            Log.d("loading", "works for $position")
+            val weightUnit = WeightUnit.getUnit(weightUnitName)
+            val heightUnit = HeightUnit.getUnit(heightUnitName)
+            stack.push(BmiRecordData(weight, weightUnit, height, heightUnit, bmi, date))
+        }
     }
 }
