@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
+import pl.mprzymus.bmi.history.FixedStack
 import pl.mprzymus.bmi.history.HistoryActivity
+import pl.mprzymus.bmi.history.model.BmiRecordData
 import java.text.DecimalFormat
 
 
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var unitsDirector: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0
+    private var history = FixedStack<BmiRecordData>(HistoryActivity.MAX_HISTORY_SIZE)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,6 +122,15 @@ class MainActivity : AppCompatActivity() {
         handler.handleBmiColor(bmi, bmiTV, defaultColor)
         val df = DecimalFormat("#.##")
         bmiTV.text = df.format(bmi)
+        history.push(
+            BmiRecordData(
+                weight,
+                unitsDirector.getCurrentWeightUnit(),
+                height,
+                unitsDirector.getCurrentHeightUnit(),
+                bmi
+            )
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -137,7 +149,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.show_history -> {
                 Log.d("history", "not implemented yet")
-                val intent = Intent(this, HistoryActivity::class.java)
+                val intent = Intent(this, HistoryActivity::class.java).apply {
+                    putExtra(HistoryActivity.HISTORY_KEY, history)
+                }
                 startActivity(intent)
                 true
             }

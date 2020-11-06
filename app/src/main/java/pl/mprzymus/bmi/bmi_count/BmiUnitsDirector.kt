@@ -1,6 +1,8 @@
 package pl.mprzymus.bmi.bmi_count
 
 import android.widget.TextView
+import pl.mprzymus.bmi.history.model.HeightUnit
+import pl.mprzymus.bmi.history.model.WeightUnit
 import pl.mprzymus.bmi.validators.EnglishValidator
 import pl.mprzymus.bmi.validators.MetricValidator
 import pl.mprzymus.bmi.validators.UnitValidator
@@ -24,5 +26,23 @@ class BmiUnitsDirector(val heightUnitsStrings: List<String>, val weightUnitsStri
 
     fun getCurrentValidator(): UnitValidator {
         return validators[index]
+    }
+
+    fun getCurrentHeightUnit(): HeightUnit {
+        val units = heightUnitsStrings[index]
+        return when {
+            units.contains(HeightUnit.CENTIMETER.toString()) -> HeightUnit.CENTIMETER
+            units.contains(HeightUnit.INCH.toString()) -> HeightUnit.INCH
+            else -> HeightUnit.UNKNOWN
+        }
+    }
+
+    fun getCurrentWeightUnit(): WeightUnit {
+        val units = weightUnitsStrings[index]
+        return when {
+            units.contains(WeightUnit.KILOGRAM.toString()) -> WeightUnit.KILOGRAM
+            units.contains(WeightUnit.POUND.toString()) -> WeightUnit.POUND
+            else -> WeightUnit.UNKNOWN
+        }
     }
 }
