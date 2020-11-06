@@ -19,11 +19,11 @@ class MetricValidator : UnitValidator, Serializable {
         return weight > WEIGHT_MAX
     }
 
-    override fun isHeightTooHigh(height: Double): Boolean {
+    override fun isHeightTooLow(height: Double): Boolean {
         return height < HEIGHT_MIN
     }
 
-    override fun isHeightTooLow(height: Double): Boolean {
+    override fun isHeightTooHigh(height: Double): Boolean {
         return height > HEIGHT_MAX
     }
 }
