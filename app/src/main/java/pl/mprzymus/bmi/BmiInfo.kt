@@ -9,7 +9,7 @@ import pl.mprzymus.bmi.databinding.ActivityBmiInfoBinding
 class BmiInfo : AppCompatActivity() {
 
     private val handler = CategoryHandler()
-    lateinit var binding: ActivityBmiInfoBinding
+    private lateinit var binding: ActivityBmiInfoBinding
 
     companion object {
         const val BMI = "BMI"

@@ -1,6 +1,5 @@
 package pl.mprzymus.bmi
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -23,7 +22,7 @@ import java.time.format.DateTimeFormatter
 
 
 class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var unitsDirector: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0

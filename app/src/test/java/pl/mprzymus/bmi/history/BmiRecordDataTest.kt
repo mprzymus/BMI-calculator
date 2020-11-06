@@ -8,9 +8,9 @@ import pl.mprzymus.bmi.history.model.WeightUnit
 
 class BmiRecordDataTest : FunSpec({
 
-    val data = BmiRecordData(70.0, WeightUnit.KILOGRAM, 180.0, HeightUnit.CENTIMETER, 23.5)
+    val data = BmiRecordData(70.0, WeightUnit.KILOGRAM, 180.0, HeightUnit.CENTIMETER, 23.5, "date")
 
     test("bmi info to string test") {
-        data.getData() shouldBe "weight: 70.0kg, height: 180.0cm, bmi: 23.5"
+        data.getData() shouldBe "70.0kg, 180.0cm, BMI: 23.5"
     }
 })

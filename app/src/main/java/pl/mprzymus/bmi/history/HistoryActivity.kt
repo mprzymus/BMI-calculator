@@ -1,19 +1,15 @@
 package pl.mprzymus.bmi.history
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.mprzymus.bmi.R
 import pl.mprzymus.bmi.databinding.HistoryLayoutBinding
 import pl.mprzymus.bmi.history.model.BmiRecordData
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.reflect.typeOf
 
 class HistoryActivity : AppCompatActivity() {
-    lateinit var binding: HistoryLayoutBinding
+    private lateinit var binding: HistoryLayoutBinding
     private lateinit var viewAdapter: HistoryAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewManager: RecyclerView.LayoutManager
