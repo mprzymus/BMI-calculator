@@ -3,11 +3,11 @@ package pl.mprzymus.bmi.history.model
 import java.io.Serializable
 
 class BmiRecordData(
-    private val weight: Double,
-    private val weightUnit: WeightUnit,
-    private val height: Double,
-    private val heightUnit: HeightUnit,
-    private val bmi: Double
+    val weight: Double,
+    val weightUnit: WeightUnit,
+    val height: Double,
+    val heightUnit: HeightUnit,
+    val bmi: Double
 ): Serializable {
     override fun toString(): String {
         return String.format(

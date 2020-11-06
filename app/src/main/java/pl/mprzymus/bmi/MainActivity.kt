@@ -1,5 +1,6 @@
 package pl.mprzymus.bmi
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
 import pl.mprzymus.bmi.history.FixedStack
 import pl.mprzymus.bmi.history.HistoryActivity
+import pl.mprzymus.bmi.history.HistoryStackSaver
 import pl.mprzymus.bmi.history.model.BmiRecordData
 import java.text.DecimalFormat
 
@@ -23,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var unitsDirector: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0
-    private var history = FixedStack<BmiRecordData>(HistoryActivity.MAX_HISTORY_SIZE)
+    private val historyDataSaver = HistoryStackSaver(this)
+    private lateinit var history: FixedStack<BmiRecordData>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +37,12 @@ class MainActivity : AppCompatActivity() {
             listOf(getString(R.string.height_cm), getString(R.string.height_uk)),
             listOf(getString(R.string.mass_kg), getString(R.string.mass_uk))
         )
+        history = historyDataSaver.load()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        historyDataSaver.save(history)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
