@@ -12,7 +12,7 @@
     <string name="bmi_ok">Your weight is good. Good job</string>
     <string name="bmi_to_low">Some info for skinny people</string>
     <string name="bmi_to_high">Some info for fat people</string>
-    <string name="empty_value_info">Firstly count BMI, idiot!</string>
+    <string name="empty_value_info">Firstly count BMI!</string>
     <string name="wrong_height_low">height too low</string>
     <string name="wrong_height_high">height too high</string>
     <string name="wrong_weight_low">weight too low</string>
