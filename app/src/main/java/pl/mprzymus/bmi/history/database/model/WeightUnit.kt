@@ -1,4 +1,4 @@
-package pl.mprzymus.bmi.history.model
+package pl.mprzymus.bmi.history.database.model
 
 enum class WeightUnit(private val unitName: String) {
     KILOGRAM("kg"), POUND("lb"),

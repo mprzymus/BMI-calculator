@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import pl.mprzymus.bmi.R
 import pl.mprzymus.bmi.databinding.HistoryLayoutBinding
-import pl.mprzymus.bmi.history.model.BmiRecordData
+import pl.mprzymus.bmi.history.database.model.BmiRecordData
 
 class HistoryActivity : AppCompatActivity() {
     private lateinit var binding: HistoryLayoutBinding

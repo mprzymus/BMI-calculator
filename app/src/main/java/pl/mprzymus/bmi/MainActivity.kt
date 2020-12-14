@@ -9,13 +9,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import pl.mprzymus.bmi.bmi_categories_handlers.CategoryHandler
 import pl.mprzymus.bmi.bmi_count.BmiUnitsDirector
 import pl.mprzymus.bmi.databinding.ActivityMainBinding
 import pl.mprzymus.bmi.history.FixedStack
 import pl.mprzymus.bmi.history.HistoryActivity
 import pl.mprzymus.bmi.history.HistoryStackSaver
-import pl.mprzymus.bmi.history.model.BmiRecordData
+import pl.mprzymus.bmi.history.database.HistoryDatabase
+import pl.mprzymus.bmi.history.database.model.BmiRecordData
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -26,8 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var unitsDirector: BmiUnitsDirector
     private var handler: CategoryHandler = CategoryHandler()
     private var defaultColor: Int = 0
-    private val historyDataSaver = HistoryStackSaver(this)
-    private lateinit var history: FixedStack<BmiRecordData>
+    private lateinit var viewModel: HistoryViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,12 +39,15 @@ class MainActivity : AppCompatActivity() {
             listOf(getString(R.string.height_cm), getString(R.string.height_uk)),
             listOf(getString(R.string.mass_kg), getString(R.string.mass_uk))
         )
-        history = historyDataSaver.load()
+        val dataSource = HistoryDatabase.getInstance(application).historyDao
+        val viewModelFactory = HistoryViewModelFactory(dataSource, application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(HistoryViewModel::class.java)
+        viewModel.load()
     }
 
     override fun onStop() {
         super.onStop()
-        historyDataSaver.save(history)
+        viewModel.save()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -135,7 +139,7 @@ class MainActivity : AppCompatActivity() {
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm")
         val dateString = dateFormatter.format(date)
         bmiTV.text = df.format(bmi)
-        history.push(
+        viewModel.history.push(
             BmiRecordData(
                 weight,
                 unitsDirector.getCurrentWeightUnit(),
@@ -164,7 +168,7 @@ class MainActivity : AppCompatActivity() {
             R.id.show_history -> {
                 Log.d("history", "not implemented yet")
                 val intent = Intent(this, HistoryActivity::class.java).apply {
-                    putExtra(HistoryActivity.HISTORY_KEY, history)
+                    putExtra(HistoryActivity.HISTORY_KEY, viewModel.history)
                 }
                 startActivity(intent)
                 true

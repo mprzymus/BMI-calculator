@@ -1,8 +1,8 @@
 package pl.mprzymus.bmi.bmi_count
 
 import android.widget.TextView
-import pl.mprzymus.bmi.history.model.HeightUnit
-import pl.mprzymus.bmi.history.model.WeightUnit
+import pl.mprzymus.bmi.history.database.model.HeightUnit
+import pl.mprzymus.bmi.history.database.model.WeightUnit
 import pl.mprzymus.bmi.validators.EnglishValidator
 import pl.mprzymus.bmi.validators.MetricValidator
 import pl.mprzymus.bmi.validators.UnitValidator

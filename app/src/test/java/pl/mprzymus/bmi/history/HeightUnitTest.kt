@@ -2,7 +2,7 @@ package pl.mprzymus.bmi.history
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import pl.mprzymus.bmi.history.model.HeightUnit
+import pl.mprzymus.bmi.history.database.model.HeightUnit
 
 class HeightUnitTest : FunSpec({
 

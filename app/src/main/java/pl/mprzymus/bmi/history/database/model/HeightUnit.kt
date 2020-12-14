@@ -1,4 +1,4 @@
-package pl.mprzymus.bmi.history.model
+package pl.mprzymus.bmi.history.database.model
 
 enum class HeightUnit(private val unitName: String) {
     CENTIMETER("cm"), INCH("in"), UNKNOWN("unknown unit");

@@ -4,9 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import pl.mprzymus.bmi.history.model.BmiRecordData
-import pl.mprzymus.bmi.history.model.HeightUnit
-import pl.mprzymus.bmi.history.model.WeightUnit
+import pl.mprzymus.bmi.history.database.model.BmiRecordData
+import pl.mprzymus.bmi.history.database.model.HeightUnit
+import pl.mprzymus.bmi.history.database.model.WeightUnit
 
 class HistoryStackSaver(private val activity: Activity) {
     companion object {
